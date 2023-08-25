@@ -24,6 +24,7 @@ http://biopython.org/wiki/Mailing_lists
 """
 from __future__ import print_function
 
+import ast
 import sys
 import os
 
@@ -414,14 +415,16 @@ if is_Numpy_installed():
                   include_dirs=[numpy_include_dir],
                   ))
 
+def get_version():
+    """Get version number from __init__.py."""
+    for line in open("Bio/__init__.py"):
+        if line.startswith("__version__ = "):
+            return ast.literal_eval(line.split("=")[1].strip())
+    return "Undefined"
 
-# We now define the Biopython version number in Bio/__init__.py
-# Here we can't use "import Bio" then "Bio.__version__" as that would
-# tell us the version of Biopython already installed (if any).
-__version__ = "Undefined"
-for line in open('Bio/__init__.py'):
-    if (line.startswith('__version__')):
-        exec(line.strip())
+
+__version__ = get_version()
+
 
 # We now load in our reStructuredText README.rst file to pass
 # explicitly in the metadata since at time of writing PyPI
