@@ -249,7 +249,8 @@ def can_import(module_name):
 
 
 def is_Numpy_installed():
-    return bool(can_import("numpy"))
+    return True
+    # return bool(can_import("numpy"))
 
 
 # Using requirements.txt is preferred for an application
