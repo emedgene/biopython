@@ -966,6 +966,42 @@ class BgzfWriter:
         """Close a file with WITH statement."""
         self.close()
 
+    def __iter__(self):
+        """
+        Raise a TypeError to explicitly indicate non-support for iteration.
+
+        This method is implemented solely to satisfy the interface check performed by
+        some libraries, such as Pandas, which require an object to be iterable to be
+        considered file-like. This class is intended for writing data in BGZF format
+        and does not support reading or iteration over its contents.
+
+        Raises:
+            TypeError: Always raised to indicate that BGZF writers do not support iteration.
+
+        References:
+            Pandas' is_file_like check: https://github.com/pandas-dev/pandas/blob/dd87dd3ef661ac06e30adc55d25a1f03deda3abf/pandas/core/dtypes/inference.py#L103
+        """
+        raise TypeError("BGZF writer does not support iteration")
+
+    def read(self, size=-1):
+        """
+        Not implemented, as this class is designed for writing, not reading.
+
+        This method is present to allow the class to pass the 'is_file_like' checks
+        by some libraries, such as Pandas, which use the presence of a 'read' method
+        as a criterion for treating objects as file-like. This class does not support
+        reading and this method should not be used.
+
+        Parameters:
+            size (int): The number of bytes to read (not used).
+
+        Raises:
+            NotImplementedError: Always raised to indicate no support for reading.
+
+        References:
+            Pandas' is_file_like check: https://github.com/pandas-dev/pandas/blob/dd87dd3ef661ac06e30adc55d25a1f03deda3abf/pandas/core/dtypes/inference.py#L103
+        """
+        raise NotImplementedError("This BGZF writer does not support reading.")
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
